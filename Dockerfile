@@ -5,6 +5,8 @@ RUN apt-get update && apt-get install -y \
 		cmake \
 		curl \
 		git
+
+
 RUN apt-get update && apt-get install -y \
 		libffi-dev \
 		libfreetype6-dev \
@@ -17,15 +19,20 @@ RUN apt-get update && apt-get install -y \
 		libpng12-dev
 
 RUN apt-get update && apt-get install -y \
+		software-properties-common
+
+RUN add-apt-repository ppa:jonathonf/python-3.6 -y && apt update -y && apt install python3.6 -y
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1
+
+ENV PYTHON_VERSION 3.6.5
+
+RUN apt-get update && apt-get install -y \
 		pkg-config \
-		python-dev \
-		software-properties-common \
 		unzip \
 		vim \
 		wget \
 		zlib1g-dev \
-		libjpeg-dev
-RUN apt-get update && apt-get install -y \
+		libjpeg-dev \
 		libpng-dev \
 		libtiff5-dev \
 		libjasper-dev \
@@ -47,9 +54,11 @@ RUN apt-get update && apt-get install -y \
 		libxine2-dev \
 		libtbb-dev \
 		libeigen3-dev
+
 RUN apt-get update && apt-get install -y \
-		python3-requests\
-		default-jdk &&\
+        python3-distutils\
+	python3-requests\
+	default-jdk &&\
      rm -rf /var/lib/apt/lists/*
 
 # Install pip
@@ -68,15 +77,12 @@ RUN apt-get update && apt-get install -y \
 
 
 # Install pytorch
-RUN pip3 install http://download.pytorch.org/whl/cu90/torch-0.3.1-cp35-cp35m-linux_x86_64.whl
-RUN pip3 install torchvision
+RUN python3 -m pip install http://download.pytorch.org/whl/cu90/torch-0.4.0-cp36-cp36m-linux_x86_64.whl
+RUN python3 -m pip install torchvision
 
-
-RUN pip3 install opencv-python
+# Install opencv
+RUN python3 -m pip install opencv-python
 
 
 # Install Flask
-RUN pip3 install Flask
-
-# Install pydrive
-RUN pip install --upgrade google-api-python-client
+RUN python3 -m pip install Flask
